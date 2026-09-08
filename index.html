@@ -1,13 +1,413 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>AERODER — Frutiger Aero Calendar</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
+
 <body>
-    <h1>sekolah</h1>
+
+    <!-- BACKGROUND -->
+    <div class="background">
+
+        <div class="sun"></div>
+
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
+
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+        <div class="bubble bubble-4"></div>
+
+        <div class="hill hill-back"></div>
+        <div class="hill hill-front"></div>
+
+    </div>
+
+
+    <!-- NAVBAR -->
+    <header class="navbar">
+
+        <div class="logo">
+            <span class="logo-icon">🌊</span>
+            <span>AERODER</span>
+        </div>
+
+        <div class="nav-actions">
+
+            <button
+                id="musicButton"
+                class="nav-button"
+            >
+                🎵 Music
+            </button>
+
+            <button
+                id="themeButton"
+                class="nav-button"
+            >
+                🌙
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- MAIN -->
+    <main>
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <div class="hero-text">
+
+                <p class="small-title">
+                    WELCOME TO
+                </p>
+
+                <h1>
+                    AERODER
+                </h1>
+
+                <p>
+                    Your colorful little calendar
+                    for everyday moments.
+                </p>
+
+            </div>
+
+            <div class="hero-icon">
+                📅
+            </div>
+
+        </section>
+
+
+        <!-- MUSIC PANEL -->
+        <section
+            id="musicPanel"
+            class="music-panel"
+        >
+
+            <div class="music-info">
+
+                <div class="music-disc">
+                    🎵
+                </div>
+
+                <div>
+                    <strong>
+                        Now Playing
+                    </strong>
+
+                    <p>
+                        New Look — Secret Potion
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="music-controls">
+
+                <button
+                    id="musicToggle"
+                    class="music-toggle"
+                >
+                    ▶ Play
+                </button>
+
+                <div class="music-status">
+                    Music OFF
+                </div>
+
+            </div>
+
+            <audio
+                id="backgroundMusic"
+                loop
+            >
+                <source
+                    src brlom
+                >
+            </audio>
+
+        </section>
+
+
+        <!-- CALENDAR CARD -->
+        <section class="calendar-card">
+
+            <!-- CALENDAR HEADER -->
+            <div class="calendar-header">
+
+                <button
+                    id="previousMonth"
+                    class="arrow-button"
+                >
+                    ←
+                </button>
+
+                <div class="month-information">
+
+                    <h2 id="monthName">
+                        January
+                    </h2>
+
+                    <span id="yearNumber">
+                        2026
+                    </span>
+
+                </div>
+
+                <button
+                    id="nextMonth"
+                    class="arrow-button"
+                >
+                    →
+                </button>
+
+            </div>
+
+
+            <!-- CONTROLS -->
+            <div class="calendar-controls">
+
+                <button
+                    id="todayButton"
+                    class="today-button"
+                >
+                    📍 Today
+                </button>
+
+                <select id="yearSelect">
+                </select>
+
+            </div>
+
+
+            <!-- DAY NAMES -->
+            <div class="weekdays">
+
+                <div class="weekday sunday">
+                    SUN
+                </div>
+
+                <div class="weekday">
+                    MON
+                </div>
+
+                <div class="weekday">
+                    TUE
+                </div>
+
+                <div class="weekday">
+                    WED
+                </div>
+
+                <div class="weekday">
+                    THU
+                </div>
+
+                <div class="weekday">
+                    FRI
+                </div>
+
+                <div class="weekday saturday">
+                    SAT
+                </div>
+
+            </div>
+
+
+            <!-- CALENDAR -->
+            <div
+                id="calendar"
+                class="calendar"
+            >
+            </div>
+
+
+            <!-- LEGEND -->
+            <div class="legend">
+
+                <div class="legend-item">
+                    <span class="legend-dot today-dot"></span>
+                    Today
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot holiday-dot"></span>
+                    Hari Penting
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot weekend-dot"></span>
+                    Hari Libur
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot event-dot"></span>
+                    Event Saya
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK INFORMATION -->
+        <section class="info-grid">
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🌴
+                </div>
+
+                <div>
+                    <h3>
+                        Weekend = Libur
+                    </h3>
+
+                    <p>
+                        Sabtu dan Minggu otomatis
+                        ditandai sebagai hari libur.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    ✨
+                </div>
+
+                <div>
+                    <h3>
+                        Tambah Event
+                    </h3>
+
+                    <p>
+                        Klik tanggal untuk menambahkan
+                        event dengan cepat.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    ☁️
+                </div>
+
+                <div>
+                    <h3>
+                        AERODER
+                    </h3>
+
+                    <p>
+                        Calendar with a little
+                        Frutiger Aero feeling.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- DATE MODAL -->
+    <div
+        id="eventModal"
+        class="modal-overlay"
+    >
+
+        <div class="event-modal">
+
+            <button
+                id="closeModal"
+                class="close-modal"
+            >
+                ×
+            </button>
+
+            <div class="modal-icon">
+                ✨
+            </div>
+
+            <h2 id="modalDate">
+                Add Event
+            </h2>
+
+            <p id="modalStatus">
+                Tambahkan sesuatu untuk tanggal ini.
+            </p>
+
+
+            <div class="event-input-area">
+
+                <input
+                    id="eventInput"
+                    type="text"
+                    placeholder="Contoh: Ulang tahun, tugas sekolah..."
+                    maxlength="60"
+                >
+
+                <button
+                    id="saveEvent"
+                    class="save-button"
+                >
+                    + Simpan Event
+                </button>
+
+            </div>
+
+
+            <div
+                id="existingEvent"
+                class="existing-event"
+            >
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <footer>
+
+        <p>
+            🌊 AERODER © 2026
+        </p>
+
+        <span>
+            Made with HTML • CSS • JavaScript
+        </span>
+
+    </footer>
+
+
+    <script src="script.js"></script>
+
 </body>
-<script src="script.js"></script>
 </html>
