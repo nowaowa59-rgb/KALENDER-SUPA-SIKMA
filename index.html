@@ -8,378 +8,406 @@
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Calendar Indonesia</title>
-
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <title>AERODER — Frutiger Aero Calendar</title>
 
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
         rel="stylesheet"
+        href="style.css"
     >
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- Background decoration -->
-    <div class="background-circle circle-one"></div>
-    <div class="background-circle circle-two"></div>
+    <!-- BACKGROUND -->
+    <div class="background">
 
-    <main class="container">
+        <div class="sun"></div>
 
-        <!-- ================= HEADER ================= -->
+        <div class="cloud cloud-1"></div>
+        <div class="cloud cloud-2"></div>
+        <div class="cloud cloud-3"></div>
 
-        <header class="topbar">
+        <div class="bubble bubble-1"></div>
+        <div class="bubble bubble-2"></div>
+        <div class="bubble bubble-3"></div>
+        <div class="bubble bubble-4"></div>
 
-            <div class="brand">
-                <div class="brand-icon">📅</div>
+        <div class="hill hill-back"></div>
+        <div class="hill hill-front"></div>
 
-                <div>
-                    <h1>Calendar</h1>
-                    <p>Indonesia Holiday Calendar</p>
-                </div>
-            </div>
-
-            <div class="top-actions">
-
-                <button
-                    id="todayBtn"
-                    class="btn secondary-btn"
-                >
-                    📍 Hari Ini
-                </button>
-
-                <button
-                    id="themeBtn"
-                    class="icon-btn"
-                    title="Ganti tema"
-                >
-                    🌙
-                </button>
-
-            </div>
-
-        </header>
+    </div>
 
 
-        <!-- ================= MAIN GRID ================= -->
+    <!-- NAVBAR -->
+    <header class="navbar">
 
-        <section class="dashboard">
+        <div class="logo">
+            <span class="logo-icon">🌊</span>
+            <span>AERODER</span>
+        </div>
 
-            <!-- Calendar Section -->
+        <div class="nav-actions">
 
-            <div class="calendar-card">
+            <button
+                id="musicButton"
+                class="nav-button"
+            >
+                🎵 Music
+            </button>
 
-                <!-- Calendar Header -->
+            <button
+                id="themeButton"
+                class="nav-button"
+            >
+                🌙
+            </button>
 
-                <div class="calendar-header">
+        </div>
 
-                    <button
-                        id="prevBtn"
-                        class="nav-btn"
-                        title="Bulan sebelumnya"
-                    >
-                        ‹
-                    </button>
-
-                    <div class="month-information">
-
-                        <h2 id="monthTitle">
-                            Januari
-                        </h2>
-
-                        <select id="yearSelect"></select>
-
-                    </div>
-
-                    <button
-                        id="nextBtn"
-                        class="nav-btn"
-                        title="Bulan berikutnya"
-                    >
-                        ›
-                    </button>
-
-                </div>
+    </header>
 
 
-                <!-- Search -->
+    <!-- MAIN -->
+    <main>
 
-                <div class="search-container">
+        <!-- HERO -->
+        <section class="hero">
 
-                    <span>🔎</span>
+            <div class="hero-text">
 
-                    <input
-                        type="text"
-                        id="searchInput"
-                        placeholder="Cari hari libur atau event..."
-                    >
+                <p class="small-title">
+                    WELCOME TO
+                </p>
 
-                </div>
+                <h1>
+                    AERODER
+                </h1>
 
-
-                <!-- Loading -->
-
-                <div
-                    id="loading"
-                    class="loading hidden"
-                >
-                    <div class="spinner"></div>
-                    <span>Mengambil data hari libur...</span>
-                </div>
-
-
-                <!-- Week Names -->
-
-                <div class="weekdays">
-
-                    <div>Sen</div>
-                    <div>Sel</div>
-                    <div>Rab</div>
-                    <div>Kam</div>
-                    <div>Jum</div>
-                    <div class="weekend-title">Sab</div>
-                    <div class="weekend-title">Min</div>
-
-                </div>
-
-
-                <!-- Calendar Days -->
-
-                <div
-                    id="calendarDays"
-                    class="calendar-days"
-                ></div>
-
-
-                <!-- Legend -->
-
-                <div class="legend">
-
-                    <div class="legend-item">
-                        <span class="legend-dot today-dot"></span>
-                        Hari ini
-                    </div>
-
-                    <div class="legend-item">
-                        <span class="legend-dot holiday-dot"></span>
-                        Hari libur
-                    </div>
-
-                    <div class="legend-item">
-                        <span class="legend-dot weekend-dot"></span>
-                        Weekend
-                    </div>
-
-                    <div class="legend-item">
-                        <span class="legend-dot event-dot"></span>
-                        Event saya
-                    </div>
-
-                </div>
+                <p>
+                    Your colorful little calendar
+                    for everyday moments.
+                </p>
 
             </div>
 
-
-            <!-- ================= SIDEBAR ================= -->
-
-            <aside class="sidebar">
-
-                <!-- Statistics -->
-
-                <div class="info-card">
-
-                    <div class="card-title">
-                        <span>📊</span>
-                        <h3>Ringkasan</h3>
-                    </div>
-
-                    <div class="statistics">
-
-                        <div class="stat-box">
-                            <span id="daysInMonth">31</span>
-                            <small>Hari</small>
-                        </div>
-
-                        <div class="stat-box holiday-stat">
-                            <span id="holidayCount">0</span>
-                            <small>Libur</small>
-                        </div>
-
-                        <div class="stat-box weekend-stat">
-                            <span id="weekendCount">8</span>
-                            <small>Weekend</small>
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Upcoming Holidays -->
-
-                <div class="info-card">
-
-                    <div class="card-title">
-                        <span>🎉</span>
-                        <h3>Hari Libur</h3>
-                    </div>
-
-                    <div
-                        id="holidayList"
-                        class="holiday-list"
-                    >
-                        <p class="empty-text">
-                            Memuat data...
-                        </p>
-                    </div>
-
-                </div>
-
-
-                <!-- Add Event -->
-
-                <div class="info-card">
-
-                    <div class="card-title">
-                        <span>📝</span>
-                        <h3>Event Pribadi</h3>
-                    </div>
-
-                    <button
-                        id="addEventBtn"
-                        class="add-event-btn"
-                    >
-                        + Tambah Event
-                    </button>
-
-                    <div
-                        id="eventList"
-                        class="event-list"
-                    ></div>
-
-                </div>
-
-            </aside>
+            <div class="hero-icon">
+                📅
+            </div>
 
         </section>
 
 
-        <!-- ================= FOOTER ================= -->
+        <!-- MUSIC PANEL -->
+        <section
+            id="musicPanel"
+            class="music-panel"
+        >
 
-        <footer>
+            <div class="music-info">
 
-            <p>
-                Calendar Indonesia •
-                HTML • CSS • JavaScript
-            </p>
+                <div class="music-disc">
+                    🎵
+                </div>
 
-            <span id="lastUpdated">
-                Data sedang diperbarui...
-            </span>
+                <div>
+                    <strong>
+                        Now Playing
+                    </strong>
 
-        </footer>
+                    <p>
+                        New Look — Secret Potion
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="music-controls">
+
+                <button
+                    id="musicToggle"
+                    class="music-toggle"
+                >
+                    ▶ Play
+                </button>
+
+                <div class="music-status">
+                    Music OFF
+                </div>
+
+            </div>
+
+            <audio
+                id="backgroundMusic"
+                loop
+            >
+                <source
+                    src="music/secret-potion.mp3"
+                    type="audio/mpeg"
+                >
+            </audio>
+
+        </section>
+
+
+        <!-- CALENDAR CARD -->
+        <section class="calendar-card">
+
+            <!-- CALENDAR HEADER -->
+            <div class="calendar-header">
+
+                <button
+                    id="previousMonth"
+                    class="arrow-button"
+                >
+                    ←
+                </button>
+
+                <div class="month-information">
+
+                    <h2 id="monthName">
+                        January
+                    </h2>
+
+                    <span id="yearNumber">
+                        2026
+                    </span>
+
+                </div>
+
+                <button
+                    id="nextMonth"
+                    class="arrow-button"
+                >
+                    →
+                </button>
+
+            </div>
+
+
+            <!-- CONTROLS -->
+            <div class="calendar-controls">
+
+                <button
+                    id="todayButton"
+                    class="today-button"
+                >
+                    📍 Today
+                </button>
+
+                <select id="yearSelect">
+                </select>
+
+            </div>
+
+
+            <!-- DAY NAMES -->
+            <div class="weekdays">
+
+                <div class="weekday sunday">
+                    SUN
+                </div>
+
+                <div class="weekday">
+                    MON
+                </div>
+
+                <div class="weekday">
+                    TUE
+                </div>
+
+                <div class="weekday">
+                    WED
+                </div>
+
+                <div class="weekday">
+                    THU
+                </div>
+
+                <div class="weekday">
+                    FRI
+                </div>
+
+                <div class="weekday saturday">
+                    SAT
+                </div>
+
+            </div>
+
+
+            <!-- CALENDAR -->
+            <div
+                id="calendar"
+                class="calendar"
+            >
+            </div>
+
+
+            <!-- LEGEND -->
+            <div class="legend">
+
+                <div class="legend-item">
+                    <span class="legend-dot today-dot"></span>
+                    Today
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot holiday-dot"></span>
+                    Hari Penting
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot weekend-dot"></span>
+                    Hari Libur
+                </div>
+
+                <div class="legend-item">
+                    <span class="legend-dot event-dot"></span>
+                    Event Saya
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- QUICK INFORMATION -->
+        <section class="info-grid">
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    🌴
+                </div>
+
+                <div>
+                    <h3>
+                        Weekend = Libur
+                    </h3>
+
+                    <p>
+                        Sabtu dan Minggu otomatis
+                        ditandai sebagai hari libur.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    ✨
+                </div>
+
+                <div>
+                    <h3>
+                        Tambah Event
+                    </h3>
+
+                    <p>
+                        Klik tanggal untuk menambahkan
+                        event dengan cepat.
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <div class="info-icon">
+                    ☁️
+                </div>
+
+                <div>
+                    <h3>
+                        AERODER
+                    </h3>
+
+                    <p>
+                        Calendar with a little
+                        Frutiger Aero feeling.
+                    </p>
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
 
 
-    <!-- ================= EVENT MODAL ================= -->
-
+    <!-- DATE MODAL -->
     <div
         id="eventModal"
-        class="modal hidden"
+        class="modal-overlay"
     >
 
-        <div class="modal-content">
+        <div class="event-modal">
 
             <button
                 id="closeModal"
-                class="close-btn"
+                class="close-modal"
             >
                 ×
             </button>
 
-            <h2>Tambah Event</h2>
+            <div class="modal-icon">
+                ✨
+            </div>
 
-            <p class="modal-description">
-                Buat event pribadi kamu.
+            <h2 id="modalDate">
+                Add Event
+            </h2>
+
+            <p id="modalStatus">
+                Tambahkan sesuatu untuk tanggal ini.
             </p>
 
-            <form id="eventForm">
 
-                <label for="eventTitle">
-                    Nama Event
-                </label>
+            <div class="event-input-area">
 
                 <input
+                    id="eventInput"
                     type="text"
-                    id="eventTitle"
-                    placeholder="Contoh: Ulang Tahun"
-                    required
+                    placeholder="Contoh: Ulang tahun, tugas sekolah..."
+                    maxlength="60"
                 >
-
-                <label for="eventDate">
-                    Tanggal
-                </label>
-
-                <input
-                    type="date"
-                    id="eventDate"
-                    required
-                >
-
-                <label for="eventDescription">
-                    Keterangan
-                </label>
-
-                <textarea
-                    id="eventDescription"
-                    placeholder="Keterangan event..."
-                    rows="3"
-                ></textarea>
 
                 <button
-                    type="submit"
-                    class="save-btn"
+                    id="saveEvent"
+                    class="save-button"
                 >
-                    Simpan Event
+                    + Simpan Event
                 </button>
 
-            </form>
-
-        </div>
-
-    </div>
+            </div>
 
 
-    <!-- ================= DATE DETAIL MODAL ================= -->
-
-    <div
-        id="dateModal"
-        class="modal hidden"
-    >
-
-        <div class="modal-content date-detail">
-
-            <button
-                id="closeDateModal"
-                class="close-btn"
+            <div
+                id="existingEvent"
+                class="existing-event"
             >
-                ×
-            </button>
-
-            <div id="dateDetailContent"></div>
+            </div>
 
         </div>
 
     </div>
 
 
-    <!-- JavaScript -->
+    <footer>
+
+        <p>
+            🌊 AERODER © 2026
+        </p>
+
+        <span>
+            Made with HTML • CSS • JavaScript
+        </span>
+
+    </footer>
+
+
     <script src="script.js"></script>
 
 </body>

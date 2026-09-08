@@ -1,57 +1,32 @@
-/* =========================================
-   CALENDAR INDONESIA
-   HTML + CSS + JAVASCRIPT
-========================================= */
+/* =========================
+   AERODER CALENDAR
+========================= */
 
 
-/* =========================================
-   1. ELEMENT HTML
-========================================= */
+/* =========================
+   ELEMENTS
+========================= */
 
-const calendarDays =
-    document.getElementById("calendarDays");
+const calendar =
+    document.getElementById("calendar");
 
-const monthTitle =
-    document.getElementById("monthTitle");
+const monthName =
+    document.getElementById("monthName");
+
+const yearNumber =
+    document.getElementById("yearNumber");
+
+const previousMonth =
+    document.getElementById("previousMonth");
+
+const nextMonth =
+    document.getElementById("nextMonth");
+
+const todayButton =
+    document.getElementById("todayButton");
 
 const yearSelect =
     document.getElementById("yearSelect");
-
-const prevBtn =
-    document.getElementById("prevBtn");
-
-const nextBtn =
-    document.getElementById("nextBtn");
-
-const todayBtn =
-    document.getElementById("todayBtn");
-
-const themeBtn =
-    document.getElementById("themeBtn");
-
-const searchInput =
-    document.getElementById("searchInput");
-
-const holidayList =
-    document.getElementById("holidayList");
-
-const holidayCount =
-    document.getElementById("holidayCount");
-
-const weekendCount =
-    document.getElementById("weekendCount");
-
-const daysInMonth =
-    document.getElementById("daysInMonth");
-
-const loading =
-    document.getElementById("loading");
-
-const lastUpdated =
-    document.getElementById("lastUpdated");
-
-const addEventBtn =
-    document.getElementById("addEventBtn");
 
 const eventModal =
     document.getElementById("eventModal");
@@ -59,25 +34,45 @@ const eventModal =
 const closeModal =
     document.getElementById("closeModal");
 
-const closeDateModal =
-    document.getElementById("closeDateModal");
+const modalDate =
+    document.getElementById("modalDate");
 
-const dateModal =
-    document.getElementById("dateModal");
+const modalStatus =
+    document.getElementById("modalStatus");
 
-const eventForm =
-    document.getElementById("eventForm");
+const eventInput =
+    document.getElementById("eventInput");
 
-const dateDetailContent =
-    document.getElementById("dateDetailContent");
+const saveEvent =
+    document.getElementById("saveEvent");
+
+const existingEvent =
+    document.getElementById("existingEvent");
+
+const themeButton =
+    document.getElementById("themeButton");
+
+const musicButton =
+    document.getElementById("musicButton");
+
+const musicToggle =
+    document.getElementById("musicToggle");
+
+const musicStatus =
+    document.querySelector(".music-status");
+
+const backgroundMusic =
+    document.getElementById("backgroundMusic");
+
+const musicPanel =
+    document.getElementById("musicPanel");
 
 
+/* =========================
+   MONTH NAMES
+========================= */
 
-/* =========================================
-   2. DATA DASAR
-========================================= */
-
-const monthNames = [
+const months = [
     "Januari",
     "Februari",
     "Maret",
@@ -93,46 +88,65 @@ const monthNames = [
 ];
 
 
-const dayNames = [
-    "Minggu",
-    "Senin",
-    "Selasa",
-    "Rabu",
-    "Kamis",
-    "Jumat",
-    "Sabtu"
-];
+/* =========================
+   IMPORTANT DAYS
+========================= */
+
+const importantDays = {
+
+    "1-1":
+        "Tahun Baru",
+
+    "2-1":
+        "Hari Kesaktian Pancasila",
+
+    "17-8":
+        "Hari Kemerdekaan RI",
+
+    "28-10":
+        "Hari Sumpah Pemuda",
+
+    "10-11":
+        "Hari Pahlawan",
+
+    "25-12":
+        "Hari Natal"
+
+};
 
 
+/* =========================
+   DATE
+========================= */
 
-/* =========================================
-   3. TANGGAL SEKARANG
-========================================= */
+const currentDate =
+    new Date();
 
-const today = new Date();
+let currentMonth =
+    currentDate.getMonth();
 
-let currentMonth = today.getMonth();
+let currentYear =
+    currentDate.getFullYear();
 
-let currentYear = today.getFullYear();
+let selectedDate =
+    null;
 
 
-
-/* =========================================
-   4. DATA HARI LIBUR
-========================================= */
-
-let holidays = [];
+/* =========================
+   EVENTS
+========================= */
 
 let events =
     JSON.parse(
-        localStorage.getItem("calendarEvents")
-    ) || [];
+        localStorage.getItem(
+            "aeroderEvents"
+        )
+    ) || {};
 
 
-
-/* =========================================
-   5. BUAT PILIHAN TAHUN
-========================================= */
+/* =========================
+   INITIALIZE YEAR
+========================= */
 
 function createYearOptions() {
 
@@ -145,133 +159,46 @@ function createYearOptions() {
     ) {
 
         const option =
-            document.createElement("option");
+            document.createElement(
+                "option"
+            );
 
         option.value = year;
 
-        option.textContent = year;
+        option.textContent =
+            year;
 
-        if (year === currentYear) {
-            option.selected = true;
-        }
-
-        yearSelect.appendChild(option);
-    }
-}
-
-
-
-/* =========================================
-   6. MENGAMBIL DATA HARI LIBUR API
-========================================= */
-
-async function fetchHolidays(year) {
-
-    loading.classList.remove("hidden");
-
-    try {
-
-        const response = await fetch(
-            `https://date.nager.at/api/v3/PublicHolidays/${year}/ID`
+        yearSelect.appendChild(
+            option
         );
-
-        if (!response.ok) {
-            throw new Error(
-                "Gagal mengambil data API"
-            );
-        }
-
-        holidays = await response.json();
-
-        lastUpdated.textContent =
-            "Data libur berhasil diperbarui";
-
-    } catch (error) {
-
-        console.error(error);
-
-        holidays = [];
-
-        lastUpdated.textContent =
-            "Data libur API tidak tersedia";
-
     }
 
-    loading.classList.add("hidden");
-
-    renderCalendar();
+    yearSelect.value =
+        currentYear;
 }
 
 
-
-/* =========================================
-   7. FORMAT TANGGAL
-========================================= */
-
-function formatDate(date) {
-
-    const year =
-        date.getFullYear();
-
-    const month =
-        String(
-            date.getMonth() + 1
-        ).padStart(2, "0");
-
-    const day =
-        String(
-            date.getDate()
-        ).padStart(2, "0");
-
-    return `${year}-${month}-${day}`;
-}
-
-
-
-/* =========================================
-   8. CEK HARI LIBUR
-========================================= */
-
-function getHoliday(dateString) {
-
-    return holidays.find(
-        holiday =>
-            holiday.date === dateString
-    );
-}
-
-
-
-/* =========================================
-   9. CEK EVENT
-========================================= */
-
-function getEvents(dateString) {
-
-    return events.filter(
-        event =>
-            event.date === dateString
-    );
-}
-
-
-
-/* =========================================
-   10. MEMBUAT KALENDER
-========================================= */
+/* =========================
+   RENDER CALENDAR
+========================= */
 
 function renderCalendar() {
 
-    calendarDays.innerHTML = "";
+    calendar.innerHTML = "";
 
-    monthTitle.textContent =
-        monthNames[currentMonth];
+    monthName.textContent =
+        months[currentMonth];
+
+    yearNumber.textContent =
+        currentYear;
 
     yearSelect.value =
         currentYear;
 
 
-    /* Hari pertama bulan */
+    /*
+        Tanggal pertama bulan
+    */
 
     const firstDay =
         new Date(
@@ -281,85 +208,55 @@ function renderCalendar() {
         );
 
 
-    /* Jumlah hari */
+    /*
+        Hari terakhir bulan
+    */
 
-    const totalDays =
+    const lastDay =
         new Date(
             currentYear,
             currentMonth + 1,
             0
-        ).getDate();
+        );
 
 
-    /* Hari terakhir bulan sebelumnya */
-
-    const previousMonthLastDay =
-        new Date(
-            currentYear,
-            currentMonth,
-            0
-        ).getDate();
-
-
-    /*
-       JavaScript:
-
-       Minggu = 0
-       Senin  = 1
-       Selasa = 2
-       ...
-    */
-
-    let startingDay =
+    const firstWeekday =
         firstDay.getDay();
 
+    const totalDays =
+        lastDay.getDate();
+
 
     /*
-       Kalender kita dimulai Senin.
-
-       Jika Minggu (0),
-       ubah menjadi 6.
+        Membuat kotak kosong
+        sebelum tanggal 1
     */
 
-    startingDay =
-        startingDay === 0
-            ? 6
-            : startingDay - 1;
-
-
-    let totalWeekend = 0;
-
-    let totalHoliday = 0;
-
-
-    /* =====================================
-       HARI BULAN SEBELUMNYA
-    ===================================== */
-
     for (
-        let i = startingDay - 1;
-        i >= 0;
-        i--
+        let i = 0;
+        i < firstWeekday;
+        i++
     ) {
 
-        const day =
-            previousMonthLastDay - i;
-
-        const cell =
-            createDayElement(
-                day,
-                currentMonth - 1,
-                currentYear,
-                true
+        const emptyDay =
+            document.createElement(
+                "div"
             );
 
-        calendarDays.appendChild(cell);
+        emptyDay.classList.add(
+            "day",
+            "empty"
+        );
+
+        calendar.appendChild(
+            emptyDay
+        );
     }
 
 
-    /* =====================================
-       HARI BULAN SEKARANG
-    ===================================== */
+    /*
+        Membuat tanggal
+    */
 
     for (
         let day = 1;
@@ -367,109 +264,259 @@ function renderCalendar() {
         day++
     ) {
 
-        const date =
-            new Date(
+        createDay(
+            day
+        );
+    }
+
+}
+
+
+/* =========================
+   CREATE DAY
+========================= */
+
+function createDay(day) {
+
+    const date =
+        new Date(
+            currentYear,
+            currentMonth,
+            day
+        );
+
+
+    const weekday =
+        date.getDay();
+
+
+    const dayElement =
+        document.createElement(
+            "div"
+        );
+
+
+    dayElement.classList.add(
+        "day"
+    );
+
+
+    /*
+        Sabtu = 6
+        Minggu = 0
+
+        Jadi keduanya libur.
+    */
+
+    if (
+        weekday === 0 ||
+        weekday === 6
+    ) {
+
+        dayElement.classList.add(
+            "weekend"
+        );
+
+    }
+
+
+    /*
+        Cek apakah hari ini
+    */
+
+    if (
+        day === currentDate.getDate() &&
+        currentMonth === currentDate.getMonth() &&
+        currentYear === currentDate.getFullYear()
+    ) {
+
+        dayElement.classList.add(
+            "today"
+        );
+
+    }
+
+
+    /*
+        Cek hari penting
+    */
+
+    const importantKey =
+        `${day}-${currentMonth + 1}`;
+
+    const importantName =
+        importantDays[
+            importantKey
+        ];
+
+
+    if (importantName) {
+
+        dayElement.classList.add(
+            "important"
+        );
+
+    }
+
+
+    /*
+        Nomor tanggal
+    */
+
+    const number =
+        document.createElement(
+            "div"
+        );
+
+    number.classList.add(
+        "day-number"
+    );
+
+    number.textContent =
+        day;
+
+
+    dayElement.appendChild(
+        number
+    );
+
+
+    /*
+        Dekorasi hari penting
+    */
+
+    if (importantName) {
+
+        const decoration =
+            document.createElement(
+                "div"
+            );
+
+        decoration.classList.add(
+            "day-decoration"
+        );
+
+        dayElement.appendChild(
+            decoration
+        );
+
+    }
+
+
+    /*
+        Nama hari penting
+    */
+
+    if (importantName) {
+
+        const holiday =
+            document.createElement(
+                "div"
+            );
+
+        holiday.classList.add(
+            "holiday-name"
+        );
+
+        holiday.textContent =
+            importantName;
+
+        dayElement.appendChild(
+            holiday
+        );
+
+    }
+
+
+    /*
+        EVENT USER
+    */
+
+    const dateKey =
+        makeDateKey(
+            currentYear,
+            currentMonth,
+            day
+        );
+
+
+    if (events[dateKey]) {
+
+        const eventName =
+            document.createElement(
+                "div"
+            );
+
+        eventName.classList.add(
+            "event-name"
+        );
+
+        eventName.textContent =
+            "✨ " +
+            events[dateKey];
+
+        dayElement.appendChild(
+            eventName
+        );
+
+    }
+
+
+    /*
+        Klik tanggal
+    */
+
+    dayElement.addEventListener(
+        "click",
+        () => {
+
+            openEventModal(
                 currentYear,
                 currentMonth,
                 day
             );
 
-        const dayOfWeek =
-            date.getDay();
-
-        if (
-            dayOfWeek === 0 ||
-            dayOfWeek === 6
-        ) {
-            totalWeekend++;
         }
+    );
 
 
-        const dateString =
-            formatDate(date);
-
-        const holiday =
-            getHoliday(dateString);
-
-        if (holiday) {
-            totalHoliday++;
-        }
-
-
-        const cell =
-            createDayElement(
-                day,
-                currentMonth,
-                currentYear,
-                false
-            );
-
-        calendarDays.appendChild(cell);
-    }
-
-
-    /* =====================================
-       HARI BULAN BERIKUTNYA
-    ===================================== */
-
-    const totalCells =
-        calendarDays.children.length;
-
-    const remainingCells =
-        42 - totalCells;
-
-    for (
-        let day = 1;
-        day <= remainingCells;
-        day++
-    ) {
-
-        const cell =
-            createDayElement(
-                day,
-                currentMonth + 1,
-                currentYear,
-                true
-            );
-
-        calendarDays.appendChild(cell);
-    }
-
-
-    /* Statistik */
-
-    daysInMonth.textContent =
-        totalDays;
-
-    weekendCount.textContent =
-        totalWeekend;
-
-    holidayCount.textContent =
-        totalHoliday;
-
-
-    renderHolidayList();
-
-    renderEventList();
+    calendar.appendChild(
+        dayElement
+    );
 }
 
 
+/* =========================
+   DATE KEY
+========================= */
 
-/* =========================================
-   11. MEMBUAT CELL HARI
-========================================= */
-
-function createDayElement(
-    day,
-    month,
+function makeDateKey(
     year,
-    isOtherMonth
+    month,
+    day
 ) {
 
-    const cell =
-        document.createElement("div");
+    return `${year}-${month + 1}-${day}`;
 
-    cell.classList.add("day");
+}
+
+
+/* =========================
+   OPEN EVENT MODAL
+========================= */
+
+function openEventModal(
+    year,
+    month,
+    day
+) {
+
+    selectedDate =
+        makeDateKey(
+            year,
+            month,
+            day
+        );
 
 
     const date =
@@ -480,589 +527,356 @@ function createDayElement(
         );
 
 
-    const dateString =
-        formatDate(date);
-
-
-    /* Nomor hari */
-
-    const number =
-        document.createElement("div");
-
-    number.className =
-        "day-number";
-
-    number.textContent =
-        date.getDate();
-
-    cell.appendChild(number);
-
-
-    /* =====================================
-       OTHER MONTH
-    ===================================== */
-
-    if (isOtherMonth) {
-
-        cell.classList.add(
-            "other-month"
-        );
-    }
-
-
-    /* =====================================
-       WEEKEND
-    ===================================== */
-
-    const dayOfWeek =
-        date.getDay();
-
-    if (
-        dayOfWeek === 0 ||
-        dayOfWeek === 6
-    ) {
-
-        cell.classList.add(
-            "weekend"
-        );
-    }
-
-
-    /* =====================================
-       TODAY
-    ===================================== */
-
-    if (
-        dateString ===
-        formatDate(today)
-    ) {
-
-        cell.classList.add(
-            "today"
-        );
-    }
-
-
-    /* =====================================
-       HOLIDAY
-    ===================================== */
-
-    const holiday =
-        getHoliday(dateString);
-
-    if (holiday) {
-
-        cell.classList.add(
-            "holiday"
-        );
-
-
-        const holidayName =
-            document.createElement("div");
-
-        holidayName.className =
-            "holiday-name";
-
-        holidayName.textContent =
-            holiday.localName ||
-            holiday.name;
-
-        cell.appendChild(
-            holidayName
-        );
-    }
-
-
-    /* =====================================
-       EVENT
-    ===================================== */
-
-    const dayEvents =
-        getEvents(dateString);
-
-    if (dayEvents.length > 0) {
-
-        const eventIndicator =
-            document.createElement("div");
-
-        eventIndicator.className =
-            "event-indicator";
-
-        cell.appendChild(
-            eventIndicator
-        );
-    }
-
-
-    /* =====================================
-       CLICK
-    ===================================== */
-
-    cell.addEventListener(
-        "click",
-        () => {
-
-            showDateDetail(
-                date
-            );
-
-        }
-    );
-
-
-    return cell;
-}
-
-
-
-/* =========================================
-   12. LIST HARI LIBUR
-========================================= */
-
-function renderHolidayList() {
-
-    holidayList.innerHTML = "";
-
-
-    const monthHolidays =
-        holidays.filter(
-            holiday => {
-
-                const date =
-                    new Date(
-                        holiday.date
-                    );
-
-                return (
-                    date.getMonth() ===
-                    currentMonth
-                );
+    const formattedDate =
+        date.toLocaleDateString(
+            "id-ID",
+            {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric"
             }
         );
 
 
-    if (
-        monthHolidays.length === 0
-    ) {
-
-        holidayList.innerHTML = `
-            <p class="empty-text">
-                Tidak ada hari libur
-                yang ditemukan bulan ini.
-            </p>
-        `;
-
-        return;
-    }
+    modalDate.textContent =
+        formattedDate;
 
 
-    monthHolidays.forEach(
-        holiday => {
-
-            const date =
-                new Date(
-                    holiday.date
-                );
-
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "holiday-item";
-
-
-            item.innerHTML = `
-
-                <div class="holiday-date">
-                    ${date.getDate()}
-                    ${monthNames[
-                        date.getMonth()
-                    ].substring(0, 3)}
-                </div>
-
-                <div class="holiday-info">
-
-                    <strong>
-                        ${
-                            holiday.localName ||
-                            holiday.name
-                        }
-                    </strong>
-
-                    <small>
-                        ${dayNames[
-                            date.getDay()
-                        ]}
-                    </small>
-
-                </div>
-            `;
-
-
-            holidayList.appendChild(
-                item
-            );
-        }
-    );
-}
-
-
-
-/* =========================================
-   13. EVENT LIST
-========================================= */
-
-function renderEventList() {
-
-    eventList.innerHTML = "";
-
-
-    const monthEvents =
-        events.filter(
-            event => {
-
-                const date =
-                    new Date(
-                        event.date
-                    );
-
-                return (
-                    date.getMonth() ===
-                    currentMonth &&
-                    date.getFullYear() ===
-                    currentYear
-                );
-            }
-        );
-
+    /*
+        Status tanggal
+    */
 
     if (
-        monthEvents.length === 0
+        date.getDay() === 0 ||
+        date.getDay() === 6
     ) {
 
-        eventList.innerHTML = `
-            <p class="empty-text">
-                Belum ada event.
-            </p>
-        `;
-
-        return;
-    }
-
-
-    monthEvents.forEach(
-        event => {
-
-            const item =
-                document.createElement(
-                    "div"
-                );
-
-            item.className =
-                "event-item";
-
-
-            item.innerHTML = `
-
-                <strong>
-                    ${event.title}
-                </strong>
-
-                <small>
-                    ${event.date}
-                </small>
-
-            `;
-
-
-            eventList.appendChild(
-                item
-            );
-        }
-    );
-}
-
-
-
-/* =========================================
-   14. DETAIL TANGGAL
-========================================= */
-
-function showDateDetail(date) {
-
-    const dateString =
-        formatDate(date);
-
-    const holiday =
-        getHoliday(dateString);
-
-    const dayEvents =
-        getEvents(dateString);
-
-
-    let html = `
-
-        <h2>
-            ${date.getDate()}
-            ${monthNames[
-                date.getMonth()
-            ]}
-            ${date.getFullYear()}
-        </h2>
-
-        <p class="detail-date">
-            ${dayNames[
-                date.getDay()
-            ]}
-        </p>
-
-    `;
-
-
-    if (holiday) {
-
-        html += `
-
-            <div class="detail-holiday">
-
-                🎉 ${
-                    holiday.localName ||
-                    holiday.name
-                }
-
-            </div>
-
-        `;
+        modalStatus.textContent =
+            "🌴 Hari ini adalah LIBUR karena weekend.";
 
     } else {
 
-        html += `
+        modalStatus.textContent =
+            "🌱 Hari biasa. Kamu bisa menambahkan event.";
 
-            <div class="detail-normal">
-
-                Tidak ada hari libur
-                pada tanggal ini.
-
-            </div>
-
-        `;
     }
 
 
-    if (dayEvents.length > 0) {
+    /*
+        Hari penting
+    */
 
-        html += `
+    const importantKey =
+        `${day}-${month + 1}`;
 
-            <div style="margin-top:15px">
+    const importantName =
+        importantDays[
+            importantKey
+        ];
 
-                <strong>
-                    📝 Event
-                </strong>
 
-                <br>
+    if (importantName) {
 
-                ${dayEvents
-                    .map(
-                        event =>
-                            `<p>
-                                ${event.title}
-                            </p>`
-                    )
-                    .join("")
-                }
+        modalStatus.textContent +=
+            ` ⭐ ${importantName}`;
 
-            </div>
-        `;
     }
 
 
-    dateDetailContent.innerHTML =
-        html;
+    eventInput.value =
+        events[selectedDate] || "";
 
-    dateModal.classList.remove(
-        "hidden"
+
+    showExistingEvent();
+
+
+    eventModal.classList.add(
+        "show"
+    );
+
+
+    setTimeout(
+        () => {
+
+            eventInput.focus();
+
+        },
+        200
     );
 }
 
 
+/* =========================
+   EXISTING EVENT
+========================= */
 
-/* =========================================
-   15. EVENT MODAL
-========================================= */
+function showExistingEvent() {
 
-addEventBtn.addEventListener(
-    "click",
-    () => {
+    existingEvent.innerHTML = "";
 
-        eventModal.classList.remove(
-            "hidden"
+
+    if (!events[selectedDate]) {
+
+        return;
+
+    }
+
+
+    const wrapper =
+        document.createElement(
+            "div"
         );
+
+    wrapper.classList.add(
+        "existing-event-item"
+    );
+
+
+    const text =
+        document.createElement(
+            "span"
+        );
+
+    text.textContent =
+        "✨ " +
+        events[selectedDate];
+
+
+    const deleteButton =
+        document.createElement(
+            "button"
+        );
+
+    deleteButton.classList.add(
+        "delete-event"
+    );
+
+    deleteButton.textContent =
+        "Hapus";
+
+
+    deleteButton.addEventListener(
+        "click",
+        deleteEvent
+    );
+
+
+    wrapper.appendChild(
+        text
+    );
+
+    wrapper.appendChild(
+        deleteButton
+    );
+
+
+    existingEvent.appendChild(
+        wrapper
+    );
+}
+
+
+/* =========================
+   SAVE EVENT
+========================= */
+
+saveEvent.addEventListener(
+    "click",
+    saveEventData
+);
+
+
+eventInput.addEventListener(
+    "keydown",
+    (event) => {
+
+        if (
+            event.key === "Enter"
+        ) {
+
+            saveEventData();
+
+        }
 
     }
 );
 
+
+function saveEventData() {
+
+    const value =
+        eventInput.value.trim();
+
+
+    /*
+        Kalau input kosong
+    */
+
+    if (!value) {
+
+        delete events[selectedDate];
+
+    } else {
+
+        events[selectedDate] =
+            value;
+
+    }
+
+
+    /*
+        Simpan ke browser
+    */
+
+    localStorage.setItem(
+        "aeroderEvents",
+        JSON.stringify(events)
+    );
+
+
+    renderCalendar();
+
+    showExistingEvent();
+
+    eventInput.value =
+        events[selectedDate] || "";
+}
+
+
+/* =========================
+   DELETE EVENT
+========================= */
+
+function deleteEvent() {
+
+    delete events[selectedDate];
+
+
+    localStorage.setItem(
+        "aeroderEvents",
+        JSON.stringify(events)
+    );
+
+
+    renderCalendar();
+
+    showExistingEvent();
+
+    eventInput.value = "";
+}
+
+
+/* =========================
+   CLOSE MODAL
+========================= */
 
 closeModal.addEventListener(
     "click",
     () => {
 
-        eventModal.classList.add(
-            "hidden"
+        eventModal.classList.remove(
+            "show"
         );
 
     }
 );
 
 
-closeDateModal.addEventListener(
+eventModal.addEventListener(
     "click",
-    () => {
+    (event) => {
 
-        dateModal.classList.add(
-            "hidden"
-        );
+        if (
+            event.target ===
+            eventModal
+        ) {
+
+            eventModal.classList.remove(
+                "show"
+            );
+
+        }
 
     }
 );
 
 
+/* =========================
+   PREVIOUS MONTH
+========================= */
 
-/* =========================================
-   16. SIMPAN EVENT
-========================================= */
-
-eventForm.addEventListener(
-    "submit",
-    function(event) {
-
-        event.preventDefault();
-
-
-        const title =
-            document.getElementById(
-                "eventTitle"
-            ).value;
-
-
-        const date =
-            document.getElementById(
-                "eventDate"
-            ).value;
-
-
-        const description =
-            document.getElementById(
-                "eventDescription"
-            ).value;
-
-
-        const newEvent = {
-
-            id: Date.now(),
-
-            title: title,
-
-            date: date,
-
-            description: description
-
-        };
-
-
-        events.push(
-            newEvent
-        );
-
-
-        localStorage.setItem(
-            "calendarEvents",
-            JSON.stringify(events)
-        );
-
-
-        eventForm.reset();
-
-        eventModal.classList.add(
-            "hidden"
-        );
-
-
-        renderCalendar();
-    }
-);
-
-
-
-/* =========================================
-   17. BULAN SEBELUMNYA
-========================================= */
-
-prevBtn.addEventListener(
+previousMonth.addEventListener(
     "click",
     () => {
 
         currentMonth--;
 
-        if (currentMonth < 0) {
+        if (
+            currentMonth < 0
+        ) {
 
             currentMonth = 11;
 
             currentYear--;
 
-            createYearOptions();
-
-            fetchHolidays(
-                currentYear
-            );
-
-        } else {
-
-            renderCalendar();
-
         }
+
+        renderCalendar();
+
     }
 );
 
 
+/* =========================
+   NEXT MONTH
+========================= */
 
-/* =========================================
-   18. BULAN BERIKUTNYA
-========================================= */
-
-nextBtn.addEventListener(
+nextMonth.addEventListener(
     "click",
     () => {
 
         currentMonth++;
 
-        if (currentMonth > 11) {
+        if (
+            currentMonth > 11
+        ) {
 
             currentMonth = 0;
 
             currentYear++;
 
-            createYearOptions();
-
-            fetchHolidays(
-                currentYear
-            );
-
-        } else {
-
-            renderCalendar();
-
         }
+
+        renderCalendar();
+
     }
 );
 
 
+/* =========================
+   TODAY BUTTON
+========================= */
 
-/* =========================================
-   19. PILIH TAHUN
-========================================= */
+todayButton.addEventListener(
+    "click",
+    () => {
+
+        currentMonth =
+            currentDate.getMonth();
+
+        currentYear =
+            currentDate.getFullYear();
+
+        renderCalendar();
+
+    }
+);
+
+
+/* =========================
+   YEAR SELECT
+========================= */
 
 yearSelect.addEventListener(
     "change",
@@ -1073,43 +887,17 @@ yearSelect.addEventListener(
                 yearSelect.value
             );
 
-        fetchHolidays(
-            currentYear
-        );
+        renderCalendar();
+
     }
 );
 
 
+/* =========================
+   DARK MODE
+========================= */
 
-/* =========================================
-   20. TOMBOL HARI INI
-========================================= */
-
-todayBtn.addEventListener(
-    "click",
-    () => {
-
-        currentMonth =
-            today.getMonth();
-
-        currentYear =
-            today.getFullYear();
-
-        createYearOptions();
-
-        fetchHolidays(
-            currentYear
-        );
-    }
-);
-
-
-
-/* =========================================
-   21. DARK MODE
-========================================= */
-
-themeBtn.addEventListener(
+themeButton.addEventListener(
     "click",
     () => {
 
@@ -1118,210 +906,174 @@ themeBtn.addEventListener(
         );
 
 
-        const isDark =
+        const dark =
             document.body.classList.contains(
                 "dark"
             );
 
 
         localStorage.setItem(
-            "darkMode",
-            isDark
+            "aeroderDarkMode",
+            dark
         );
 
 
-        themeBtn.textContent =
-            isDark
+        themeButton.textContent =
+            dark
                 ? "☀️"
                 : "🌙";
+
     }
 );
 
 
+/*
+    Ambil mode sebelumnya
+*/
 
-/* =========================================
-   22. LOAD DARK MODE
-========================================= */
-
-function loadTheme() {
-
-    const darkMode =
-        localStorage.getItem(
-            "darkMode"
-        );
-
-
-    if (darkMode === "true") {
-
-        document.body.classList.add(
-            "dark"
-        );
-
-        themeBtn.textContent =
-            "☀️";
-    }
-}
-
-
-
-/* =========================================
-   23. SEARCH
-========================================= */
-
-searchInput.addEventListener(
-    "input",
-    () => {
-
-        const keyword =
-            searchInput.value
-                .toLowerCase()
-                .trim();
-
-
-        const days =
-            document.querySelectorAll(
-                ".day"
-            );
-
-
-        days.forEach(
-            day => {
-
-                if (
-                    keyword === ""
-                ) {
-
-                    day.style.opacity =
-                        "1";
-
-                    return;
-                }
-
-
-                const text =
-                    day.textContent
-                        .toLowerCase();
-
-
-                if (
-                    text.includes(keyword)
-                ) {
-
-                    day.style.opacity =
-                        "1";
-
-                    day.style.transform =
-                        "scale(1.03)";
-
-                } else {
-
-                    day.style.opacity =
-                        "0.25";
-
-                    day.style.transform =
-                        "scale(1)";
-                }
-            }
-        );
-    }
-);
-
-
-
-/* =========================================
-   24. KEYBOARD NAVIGATION
-========================================= */
-
-document.addEventListener(
-    "keydown",
-    event => {
-
-        if (
-            event.key ===
-            "ArrowLeft"
-        ) {
-
-            prevBtn.click();
-
-        }
-
-
-        if (
-            event.key ===
-            "ArrowRight"
-        ) {
-
-            nextBtn.click();
-
-        }
-
-
-        if (
-            event.key ===
-            "Escape"
-        ) {
-
-            eventModal.classList.add(
-                "hidden"
-            );
-
-            dateModal.classList.add(
-                "hidden"
-            );
-        }
-    }
-);
-
-
-
-/* =========================================
-   25. TUTUP MODAL KETIKA KLIK LUAR
-========================================= */
-
-window.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target ===
-            eventModal
-        ) {
-
-            eventModal.classList.add(
-                "hidden"
-            );
-        }
-
-
-        if (
-            event.target ===
-            dateModal
-        ) {
-
-            dateModal.classList.add(
-                "hidden"
-            );
-        }
-    }
-);
-
-
-
-/* =========================================
-   26. START APPLICATION
-========================================= */
-
-function init() {
-
-    createYearOptions();
-
-    loadTheme();
-
-    fetchHolidays(
-        currentYear
+const savedDarkMode =
+    localStorage.getItem(
+        "aeroderDarkMode"
     );
 
+
+if (
+    savedDarkMode === "true"
+) {
+
+    document.body.classList.add(
+        "dark"
+    );
+
+    themeButton.textContent =
+        "☀️";
+
 }
 
 
-init();
+/* =========================
+   MUSIC
+========================= */
+
+let musicEnabled = false;
+
+
+/*
+    Tombol Music pada navbar
+*/
+
+musicButton.addEventListener(
+    "click",
+    () => {
+
+        musicEnabled =
+            !musicEnabled;
+
+
+        if (musicEnabled) {
+
+            playMusic();
+
+        } else {
+
+            stopMusic();
+
+        }
+
+    }
+);
+
+
+/*
+    Tombol Play / Pause
+*/
+
+musicToggle.addEventListener(
+    "click",
+    () => {
+
+        if (
+            backgroundMusic.paused
+        ) {
+
+            playMusic();
+
+        } else {
+
+            stopMusic();
+
+        }
+
+    }
+);
+
+
+/*
+    PLAY MUSIC
+*/
+
+function playMusic() {
+
+    backgroundMusic
+        .play()
+        .then(
+            () => {
+
+                musicEnabled =
+                    true;
+
+                musicPanel.classList.add(
+                    "playing"
+                );
+
+                musicToggle.textContent =
+                    "⏸ Pause";
+
+                musicStatus.textContent =
+                    "Music ON";
+
+            }
+        )
+        .catch(
+            () => {
+
+                musicStatus.textContent =
+                    "Tambahkan file music/new-look.mp3";
+
+            }
+        );
+
+}
+
+
+/*
+    STOP MUSIC
+*/
+
+function stopMusic() {
+
+    backgroundMusic.pause();
+
+    musicEnabled =
+        false;
+
+    musicPanel.classList.remove(
+        "playing"
+    );
+
+    musicToggle.textContent =
+        "▶ Play";
+
+    musicStatus.textContent =
+        "Music OFF";
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+createYearOptions();
+
+renderCalendar();
