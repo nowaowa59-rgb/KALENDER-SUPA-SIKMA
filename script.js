@@ -1034,15 +1034,6 @@ function playMusic() {
 
             }
         )
-        .catch(
-            () => {
-
-                musicStatus.textContent =
-                    "Tambahkan file music/new-look.mp3";
-
-            }
-        );
-
 }
 
 
